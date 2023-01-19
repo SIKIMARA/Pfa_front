@@ -1,10 +1,11 @@
-import { Alert, Button, Grid, IconButton, Paper, Typography } from '@mui/material'
+import { Alert, Box, Button, Grid, IconButton, Paper, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { width } from '@mui/system';
+import emailjs from '@emailjs/browser';
 
 export default function Utilisateurs() {
     const [message, setmessage] = React.useState('');
@@ -71,16 +72,18 @@ export default function Utilisateurs() {
             selector:row=>row.role,
         },
         {
-            name:"Accepter",
-            selector:row=><IconButton color='success' onClick={(e)=>{handleApprove(row.id)}}><CheckCircleIcon/></IconButton>
+            name:"Action",
+            selector:row=>
+            (<Box >
+            <IconButton color='success' onClick={(e)=>{handleApprove(row.id,row.email,row.lastname)}}><CheckCircleIcon/></IconButton>
+            <IconButton color='error' onClick={(e)=>{handleDelete(row)}}><RemoveCircleIcon/></IconButton>
+            </Box>
+            )
         },
-        {
-            name:"Refuser",
-            selector:row=><IconButton color='error' onClick={(e)=>{handleDelete(row.id)}}><RemoveCircleIcon/></IconButton>
-        }
+        
         
     ]
-    const handleApprove = (id) => {
+    const handleApprove = (id,email,name) => {
         fetch(`http://localhost:8080/api/v1/auth/approve/${id}`, {
             method: 'POST',
             headers: {
@@ -91,7 +94,17 @@ export default function Utilisateurs() {
         .then(data => {
             
             setmessage("utilisateur est accepté");
-            //fetchPendingUsers();
+            console.log("user : ")
+            
+            
+            emailjs.send("service_spr627e","template_8gs04cl",{
+                    name: name,
+                    email: email,
+                    },"bnJkkW0WT08mnAyIQ");
+            setTimeout(() => {
+                fetchPendingUsers();
+            }, 1000);
+            
         })
         .catch(error => {
             console.log(error);
@@ -108,7 +121,9 @@ export default function Utilisateurs() {
         .then(data => {
             
             setmessage("Utilisateur est supprimé");
-            //fetchPendingUsers();
+            setTimeout(() => {
+                fetchPendingUsers();
+            }, 1000);
         })
         .catch(error => {
             console.log(error);
@@ -130,11 +145,7 @@ export default function Utilisateurs() {
             (<>
             
             <Alert sx={{m:2}} variant="outlined" severity="success"> {message}</Alert>
-            {
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1000)
-            }
+           
             </>)
             }
     
