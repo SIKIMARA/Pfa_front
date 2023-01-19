@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ensaf from "../../Images/ensaf.jpeg"
 import usmba from "../../Images/USMBA.png"
 import zIndex from '@mui/material/styles/zIndex';
-import { Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Alert, AlertTitle, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 
 
@@ -23,21 +23,49 @@ const theme = createTheme();
 
 export default function Register() {
     const [role, setRole] = React.useState('');
-
+    const [message, setmessage] = React.useState('');
+    const [Error,setError]=React.useState('');
     const handleChange = (event) => {
       setRole(event.target.value);
     };
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    setError("");
+    setmessage("");
+    const values = {
     lastname:data.get('lastName'),
     firstname:data.get('firstName'),
       email: data.get('email'),
       password: data.get('password'),
       confirmpassword:data.get('confirm-password'),
       role:data.get('Role')
-    });
+    }
+    console.log(values)
+    if(values.password!=values.confirmpassword){setError("Error : Password Incorrecte");return;}
+    if(!values.email || !values.firstname || !values.lastname || !values.password || !values.confirmpassword || !values.role){
+      setError("Error : Input Required");return;
+    }
+    
+    //////// fetching data to the backend
+    fetch('http://localhost:8080/api/v1/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        //message
+        setmessage(data.message)
+        console.log('Success:', data);
+      }
+      )
+      .catch((error) => {
+        console.error('Error:', error);
+      }
+      );
   };
 
   return (
@@ -89,6 +117,16 @@ export default function Register() {
             alignItems: 'center',
           }}
         >
+          {message &&
+              <Alert variant="outlined" severity="info">
+              {message}
+            </Alert>
+          }
+          {Error &&
+              <Alert variant="outlined" severity="error">
+              {Error}
+            </Alert>
+          }
           
           <Typography component="h1" variant="h4">
             Sign up
@@ -162,8 +200,8 @@ export default function Register() {
                     name='Role'
                     onChange={handleChange}
                 >
-                    <MenuItem value={"Professeur"}>Professeur</MenuItem>
-                    <MenuItem value={"Etudiant"}>Etudiant</MenuItem>
+                    <MenuItem value={"ENSEIGNANT"}>Enseignant</MenuItem>
+                    <MenuItem value={"ETUDIANT"}>Etudiant</MenuItem>
                     
                 </Select>
                 </FormControl>

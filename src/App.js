@@ -9,6 +9,9 @@ import Utilisateurs from './Component/dashboard/Utilisateurs';
 import Login from './Component/Login/Login';
 import Register from './Component/Login/Register';
 import Acceuil from './Component/Home/Acceuil';
+import HomeInterface from './Component/Home/HomeInterface';
+import Etudiant from './Component/Etudiant/Etudiant';
+import Enseignant from './Component/Enseignant/Enseignant';
 
 function App() {
   return (
@@ -22,8 +25,11 @@ function App() {
             <Route path='Utilisateurs' element={<Utilisateurs/>}></Route>
           </Route>
           <Route path='/' element={<Acceuil/>}>
-          <Route path='/Login' element={<Login/>}></Route>
-          <Route path='/Register' element={<Register/>}></Route>
+          <Route path='' exact element={<HomeInterface/>}/>
+          <Route path='Login' element={<Login/>}></Route>
+          <Route path='Register' element={<Register/>}></Route>
+          <Route path='Etudiant' element={<Etudiant/>}></Route>
+          <Route path='Enseignant' element={<Enseignant/>}></Route>
           </Route>
           
           

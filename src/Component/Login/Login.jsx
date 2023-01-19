@@ -15,23 +15,63 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ensaf from "../../Images/ensaf.jpeg"
 import usmba from "../../Images/USMBA.png"
 import zIndex from '@mui/material/styles/zIndex';
-import { Divider } from '@mui/material';
+import { Alert, Divider } from '@mui/material';
 import Header from '../Header/Header';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const theme = createTheme();
 
 export default function Login() {
-
+  //message
+  const navigate =useNavigate();
+  const [message, setmessage] = React.useState('');
+  const [Error,setError]=React.useState('');
+  const [Role,setRole]=React.useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    setError("");
+    setmessage("");
+    const values ={
       email: data.get('email'),
       password: data.get('password'),
-    });
+    }
+    //////// fetching data to the backend
+    fetch('http://localhost:8080/api/v1/auth/authenticate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        //message
+        setmessage(data.message)
+        if(data.role==="ENSEIGNANT"){
+          navigate("/Enseignant")
+        }
+        if(data.role==="ETUDIANT"){
+          navigate("/Etudiant")
+        }
+        if(data.role==="ADMIN"){
+          navigate("/Dashboard")
+        }
+        setRole(data.role)
+        
+        console.log('Success:', data);
+        
+      }
+      )
+      .catch((error) => {
+        console.error('Error:', error);
+        setError('Error : Password or Email Incorrect')
+      }
+      );
   };
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -40,10 +80,6 @@ export default function Login() {
         <CssBaseline />
         <Grid
           item
-          
-          
-          
-         
          lg={7}
           sx={{
             backgroundImage:`url(${ensaf})`,
@@ -76,6 +112,9 @@ export default function Login() {
         </Grid>
         
         <Grid item xs={12} sm={12} lg={5} component={Paper} elevation={6} square>
+
+          
+          
           <Box
             sx={{
               my: 8,
@@ -85,6 +124,22 @@ export default function Login() {
               alignItems: 'center',
             }}
           >
+            {
+                message && <Alert variant="outlined" severity="info">
+                {message} </Alert>}
+              
+            
+            {Role &&  <Alert variant="outlined" severity="success">
+                Login succesful
+              </Alert>}
+            
+            {
+              Error && <Alert variant="outlined" severity="error">
+              {Error}
+            </Alert>
+            }
+            
+            
             
             <Typography component="h1" variant="h4" p={2}>
               Sign in
@@ -118,6 +173,7 @@ export default function Login() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign In
