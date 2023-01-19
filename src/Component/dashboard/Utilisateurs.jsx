@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import Authenticated from '../Login/Authenticated'
 import { width } from '@mui/system';
 
 export default function Utilisateurs() {
@@ -119,7 +120,7 @@ export default function Utilisateurs() {
         fetchPendingUsers();
     }, [])
   return (
-    
+    <Authenticated>
     <Grid container spacing={1} style={{width:"100vw",height:"100vh"}} >
     
     <Grid xs={12}>
@@ -155,5 +156,6 @@ export default function Utilisateurs() {
         </Paper>
     </Grid>
     </Grid>
+    </Authenticated>
   )
 }

@@ -8,6 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import Authenticated from './Authenticated';
+import { useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -15,6 +17,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ensaf from "../../Images/ensaf.jpeg"
 import usmba from "../../Images/USMBA.png"
 import zIndex from '@mui/material/styles/zIndex';
+import { useDispatch } from 'react-redux';
+import { setRole } from '../Redux/roleSlice'; 
 import { Alert, Divider } from '@mui/material';
 import Header from '../Header/Header';
 import { useNavigate } from 'react-router-dom';
@@ -24,11 +28,13 @@ import { useNavigate } from 'react-router-dom';
 const theme = createTheme();
 
 export default function Login() {
+  const dispatch = useDispatch();
+  
   //message
   const navigate =useNavigate();
   const [message, setmessage] = React.useState('');
   const [Error,setError]=React.useState('');
-  const [Role,setRole]=React.useState('');
+  //const [Role,setRole]=React.useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -51,15 +57,17 @@ export default function Login() {
         //message
         setmessage(data.message)
         if(data.role==="ENSEIGNANT"){
+          dispatch(setRole(data.role))
           navigate("/Enseignant")
         }
         if(data.role==="ETUDIANT"){
+          dispatch(setRole(data.role))
           navigate("/Etudiant")
         }
         if(data.role==="ADMIN"){
+          dispatch(setRole(data.role))
           navigate("/Dashboard")
         }
-        setRole(data.role)
         
         console.log('Success:', data);
         
@@ -71,9 +79,14 @@ export default function Login() {
       }
       );
   };
+const Role = useSelector(state => state.role);
+console.log(Role)
+  
   
 
+
   return (
+    <Authenticated>
     <ThemeProvider theme={theme}>
         
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -129,7 +142,7 @@ export default function Login() {
                 {message} </Alert>}
               
             
-            {Role &&  <Alert variant="outlined" severity="success">
+            {Role=="guest" &&  <Alert variant="outlined" severity="success">
                 Login succesful
               </Alert>}
             
@@ -192,5 +205,6 @@ export default function Login() {
         </Grid>
       </Grid>
     </ThemeProvider>
+    </Authenticated>
   );
 }

@@ -6,10 +6,10 @@ import Home from './Home'
 import { Box } from '@mui/material'
 import Utilisateurs from './Utilisateurs'
 import Historique from './Historique'
-
+import Authenticated from '../Login/Authenticated'
 export default function Dashboard() {
   return (
-    
+    <Authenticated>
     <Box sx={{display:"flex"}}>
     <SideNav/>
     <Box component="main" sx={{flexGrow:1,p:1,paddingTop:"50px",backgroundColor:"#dfe8f2"}}>
@@ -21,5 +21,6 @@ export default function Dashboard() {
       </Routes>
     </Box>
     </Box>
+    </Authenticated>
   )
 }

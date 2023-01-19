@@ -9,21 +9,25 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setRole } from '../Redux/roleSlice';
 import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
-
 export default function Header() {
 const pages = ['Se connecter', "S'identifier"];
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+  const role = useSelector(state => state.role);
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -39,7 +43,18 @@ const pages = ['Se connecter', "S'identifier"];
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  React.useEffect(() => {
+    if(role.role!=="guest"){
+      setAuth(true);
+    }
+  }, [role]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(setRole("guest"));
+    setAuth(false);
+    navigate("/login");
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       
@@ -52,6 +67,7 @@ const pages = ['Se connecter', "S'identifier"];
           {auth ? (
             <div>
               <IconButton
+              
                 size="large"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -77,7 +93,7 @@ const pages = ['Se connecter', "S'identifier"];
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={(e) => {handleLogout()}}>Se deconnecter</MenuItem>
               </Menu>
             </div>
           ):(<div>

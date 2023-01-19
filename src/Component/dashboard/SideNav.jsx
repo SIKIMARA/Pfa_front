@@ -15,6 +15,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import { useDispatch } from 'react-redux';
+import { setRole} from '../Redux/roleSlice';
+import { useSelector } from 'react-redux';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
@@ -121,6 +124,14 @@ export default function SideNav() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  //HandleRole setRole('guest')
+  const role = useSelector(state => state.role);
+  const dispatch=useDispatch();
+  const handleRole=()=>{
+    dispatch(setRole("guest"));
+    console.log("your role is "+ role.role);
+    navigate('/login');
+  }
 
   return (
  <> 
@@ -180,7 +191,7 @@ export default function SideNav() {
         <Divider />
         <List>
           
-            <ListItem key={4} disablePadding sx={{ display: 'block' }} >
+            <ListItem key={4} disablePadding sx={{ display: 'block' }} onClick={(e) => {handleRole()}} >
               <ListItemButton
                 sx={{
                   minHeight: 48,
