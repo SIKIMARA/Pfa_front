@@ -18,7 +18,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 
 export default function Header() {
 const pages = ['Se connecter', "S'identifier"];
-  const [auth, setAuth] = React.useState(false);
+  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const handleOpenNavMenu = (event) => {
@@ -43,7 +43,7 @@ const pages = ['Se connecter', "S'identifier"];
   return (
     <Box sx={{ flexGrow: 1 }}>
       
-      <AppBar position="fixed">
+      <AppBar position="static">
         <Toolbar sx={{backgroundColor:"white"}}>
           
           <Typography variant="h5" component="div" sx={{ flexGrow: 1,color:"blue",fontWeight:"bold" }}>
@@ -57,7 +57,7 @@ const pages = ['Se connecter', "S'identifier"];
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleMenu}
-                color="inherit"
+                color="blue"
               >
                 <AccountCircle />
               </IconButton>

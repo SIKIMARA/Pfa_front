@@ -8,6 +8,7 @@ import Historique from './Component/dashboard/Historique';
 import Utilisateurs from './Component/dashboard/Utilisateurs';
 import Login from './Component/Login/Login';
 import Register from './Component/Login/Register';
+import Acceuil from './Component/Home/Acceuil';
 
 function App() {
   return (
@@ -20,8 +21,11 @@ function App() {
             <Route path='Historique' element={<Historique/>}></Route>
             <Route path='Utilisateurs' element={<Utilisateurs/>}></Route>
           </Route>
+          <Route path='/' element={<Acceuil/>}>
           <Route path='/Login' element={<Login/>}></Route>
           <Route path='/Register' element={<Register/>}></Route>
+          </Route>
+          
           
         </Routes>
       </BrowserRouter>
