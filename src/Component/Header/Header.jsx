@@ -5,29 +5,31 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setRole } from '../Redux/roleSlice';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Button } from '@mui/material';
+import { Badge, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
+import StringAvatar from '../StringAvatar';
+import store from '../Redux/store';
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import Panier from '../Enseignant/Panier';
+import Modal from '@mui/material/Modal';
+
 export default function Header() {
+  const [open,setOpen]=React.useState(false);
+const Navigate=useNavigate();
 const pages = ['Se connecter', "S'identifier"];
+
   const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const role = useSelector(state => state.role);
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -39,22 +41,26 @@ const pages = ['Se connecter', "S'identifier"];
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+  const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
   const handleClose = () => {
     setAnchorEl(null);
   };
   React.useEffect(() => {
-    if(role.role!=="guest"){
+    if (token && role) {
       setAuth(true);
     }
   }, [role]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
-    dispatch(setRole("guest"));
+    //destroy token and role in the local storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
     setAuth(false);
     navigate("/login");
   }
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
       
@@ -62,10 +68,16 @@ const pages = ['Se connecter', "S'identifier"];
         <Toolbar sx={{backgroundColor:"white"}}>
           
           <Typography variant="h5" component="div" sx={{ flexGrow: 1,color:"blue",fontWeight:"bold" }}>
+          
             <Inventory2Icon sx={{paddingTop:"4px"}}/> GESTION D'INVENTAIRE
           </Typography>
           {auth ? (
-            <div>
+            <div style={{display:"flex",alignItems:"center"}}>
+              <IconButton href='/panier'>
+              <Badge badgeContent={1} color="primary">
+                 <LocalGroceryStoreIcon color="action" />
+              </Badge>
+              </IconButton>
               <IconButton
               
                 size="large"
@@ -75,7 +87,7 @@ const pages = ['Se connecter', "S'identifier"];
                 onClick={handleMenu}
                 color="blue"
               >
-                <AccountCircle />
+                <StringAvatar string={`${localStorage.getItem('username')}`} />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -92,14 +104,16 @@ const pages = ['Se connecter', "S'identifier"];
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <Typography sx={{color:"black",fontWeight:"bold",textAlign:"center",padding:"10px"}}>Bienvenue, {localStorage.getItem('username')} </Typography>
+                <MenuItem href="/" onClick={(e)=>{Navigate("/")}}>Home</MenuItem>
+                <MenuItem href="/etudiant" onClick={(e)=>{Navigate("/etudiant")}}>Materiels</MenuItem>
                 <MenuItem onClick={(e) => {handleLogout()}}>Se deconnecter</MenuItem>
               </Menu>
             </div>
           ):(<div>
           <Box sx={{m:1 ,display:{xs:"none",md:"flex"}}}>
-            <Button endIcon={<LoginIcon/>} style={{background:"blue",fontWeight:"700",marginRight:"10px",padding:"10px",color:"white"}}>Se Connecter</Button>
-            <Button endIcon={<LogoutIcon/>} style={{border:"1px solid blue",fontWeight:"700",padding:"10px"}}>S'identifier</Button>
+            <Button endIcon={<LoginIcon/>} style={{background:"blue",fontWeight:"700",marginRight:"10px",padding:"10px",color:"white"}} href='/login'>Se Connecter</Button>
+            <Button endIcon={<LogoutIcon/>} style={{border:"1px solid blue",fontWeight:"700",padding:"10px"}} href='/register'>S'identifier</Button>
             </Box>
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -142,6 +156,7 @@ const pages = ['Se connecter', "S'identifier"];
           )}
         </Toolbar>
       </AppBar>
+      
     </Box>
   );
 }

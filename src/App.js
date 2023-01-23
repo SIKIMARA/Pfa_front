@@ -13,6 +13,11 @@ import HomeInterface from './Component/Home/HomeInterface';
 import Etudiant from './Component/Etudiant/Etudiant';
 import Enseignant from './Component/Enseignant/Enseignant';
 
+import MaterialDetails from './Component/Material/MaterialDetails';
+import G_Materials from './Component/dashboard/G_Materials';
+import Panier from './Component/Enseignant/Panier';
+import Utilisateurs_PE from './Component/dashboard/Utilisateurs_PE';
+
 function App() {
   return (
     <div className="App">
@@ -20,16 +25,23 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/dashboard'  element={<Dashboard/>}>
-            <Route path='home' element={<Home/>}></Route>
+            <Route path='' element={<Home/>}></Route>
             <Route path='Historique' element={<Historique/>}></Route>
-            <Route path='Utilisateurs' element={<Utilisateurs/>}></Route>
+            <Route path='Invitations' element={<Utilisateurs/>}></Route>
+            <Route path='Materiels' element={<G_Materials/>}></Route>
+            <Route path='Utilisateurs' element={<Utilisateurs_PE/>}></Route>
           </Route>
           <Route path='/' element={<Acceuil/>}>
           <Route path='' exact element={<HomeInterface/>}/>
           <Route path='Login' element={<Login/>}></Route>
           <Route path='Register' element={<Register/>}></Route>
-          <Route path='Etudiant' element={<Etudiant/>}></Route>
-          <Route path='Enseignant' element={<Enseignant/>}></Route>
+          <Route path='Etudiant' element={<Etudiant/>}>
+          </Route>
+          <Route path='/Panier' element={<Panier/>}></Route>
+          <Route path='Enseignant' element={<Enseignant/>}>
+            
+          </Route>
+          <Route path='Material/:id' element={<MaterialDetails/>}></Route>
           </Route>
           
           

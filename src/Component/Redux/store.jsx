@@ -1,8 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import roleReducer from './roleSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import MaterialReducer from './userSlice';
+
 
 const store = configureStore({
-  reducer: { role: roleReducer },
+    reducer: {
+        Material: MaterialReducer,
+        
+    }
 });
-
 export default store;

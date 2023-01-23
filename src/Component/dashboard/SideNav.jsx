@@ -16,7 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { useDispatch } from 'react-redux';
-import { setRole} from '../Redux/roleSlice';
+
 import { useSelector } from 'react-redux';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -26,6 +26,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import HistoryIcon from '@mui/icons-material/History';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 const drawerWidth = 240;
 const NavData=[
   {
@@ -35,9 +37,9 @@ const NavData=[
     link:"/dashboard",
   },{
     id:2,
-    text:"Utilisateurs",
-    Icon:<PersonIcon />,
-    link:"/dashboard/Utilisateurs",
+    text:"Invitations",
+    Icon:< MailOutlineIcon/>,
+    link:"/dashboard/Invitations",
   },
   
   {
@@ -45,6 +47,19 @@ const NavData=[
     text:"Historique",
     Icon:<HistoryIcon />,
     link:"/dashboard/Historique",
+  },
+  {
+    id:4,
+    text:"Materiels",
+    Icon:<PrecisionManufacturingIcon />,
+    link:"/dashboard/Materiels",
+  }
+  ,
+  {
+    id:5,
+    text:"Utilisateurs",
+    Icon:<PersonIcon />,
+    link:"/dashboard/Utilisateurs",
   }
 ]
 const openedMixin = (theme) => ({
@@ -128,11 +143,11 @@ export default function SideNav() {
   const role = useSelector(state => state.role);
   const dispatch=useDispatch();
   const handleRole=()=>{
-    dispatch(setRole("guest"));
-    console.log("your role is "+ role.role);
+    //destroy token and role in the local storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
     navigate('/login');
   }
-
   return (
  <> 
       <CssBaseline />

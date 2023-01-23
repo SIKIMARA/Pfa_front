@@ -1,20 +1,50 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useSelector } from 'react-redux';
-const Authenticated = ({ children }) => {
-    const history = useNavigate();
-    const role = useSelector(state => state.role);
-    console.log("role is " + role.role);
-  // Check for the presence of a valid token in local storage
-  useEffect(() => {
-    if (role.role === "guest") {
-      // If the token is not present, redirect the user to the login page
-        history("/login");
-    }
-  }, [history]);
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-  return <>{children}</>;
+const Authenticated = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const history = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    if (!token || !role) {
+      history('/login');
+    } else {
+      checkAuthentication();
+    }
+  }, []);
+
+  const checkAuthentication = async () => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/auth/verify', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        const data = await response.json();
+        
+        if (data.role === 'ADMIN') {
+          history('/dashboard');
+        }
+        if (data.role === 'ETUDIANT') {
+          history('/etudiant');
+        }
+        if (data.role === 'ENSEIGNANT') {
+          history('/enseignant');
+        }
+      }
+    } catch (error) {
+      
+    }
+  };
+
+  return children;
 };
 
 export default Authenticated;

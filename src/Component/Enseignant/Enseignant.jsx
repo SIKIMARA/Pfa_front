@@ -1,7 +1,10 @@
 import React from 'react'
+import Authenticated from '../Login/Authenticated'
 
 export default function Enseignant() {
   return (
-    <div>Enseignant</div>
+    <Authenticated>
+      Enseignant
+    </Authenticated> 
   )
 }

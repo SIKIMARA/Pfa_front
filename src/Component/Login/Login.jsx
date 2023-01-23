@@ -18,18 +18,19 @@ import ensaf from "../../Images/ensaf.jpeg"
 import usmba from "../../Images/USMBA.png"
 import zIndex from '@mui/material/styles/zIndex';
 import { useDispatch } from 'react-redux';
-import { setRole } from '../Redux/roleSlice'; 
+
 import { Alert, Divider } from '@mui/material';
 import Header from '../Header/Header';
 import { useNavigate } from 'react-router-dom';
+import store from '../Redux/store';
+import { updateUser } from '../Redux/userSlice';
 
 
 
 const theme = createTheme();
 
 export default function Login() {
-  const dispatch = useDispatch();
-  
+  const dispatch=useDispatch();
   //message
   const navigate =useNavigate();
   const [message, setmessage] = React.useState('');
@@ -56,31 +57,34 @@ export default function Login() {
       .then((data) => {
         //message
         setmessage(data.message)
+        
+        localStorage.setItem('id',`${data.id}`)
+        localStorage.setItem('username',`${data.firstname} ${data.lastname}`)
+        localStorage.setItem('email',data.email);
+        localStorage.setItem('role', data.role);
+        localStorage.setItem('token', data.token);
         if(data.role==="ENSEIGNANT"){
-          dispatch(setRole(data.role))
           navigate("/Enseignant")
         }
         if(data.role==="ETUDIANT"){
-          dispatch(setRole(data.role))
           navigate("/Etudiant")
         }
         if(data.role==="ADMIN"){
-          dispatch(setRole(data.role))
           navigate("/Dashboard")
         }
         
-        console.log('Success:', data);
+        
         
       }
       )
       .catch((error) => {
-        console.error('Error:', error);
+       console.log(error)
         setError('Error : Password or Email Incorrect')
       }
       );
   };
 const Role = useSelector(state => state.role);
-console.log(Role)
+
   
   
 
