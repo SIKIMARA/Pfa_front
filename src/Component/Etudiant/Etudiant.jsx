@@ -10,7 +10,7 @@ export default function Etudiant() {
     <Authenticated>
       
       <Filter/>
-      <ListMaterials/>
+      
       
     </Authenticated>
       

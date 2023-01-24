@@ -1,5 +1,5 @@
 import { Alert, Avatar, Box, Button, Grid, IconButton, Paper, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -12,7 +12,7 @@ import StringAvatar from '../StringAvatar';
 
 export default function ListeDesMateriels() {
     const [message, setmessage] = React.useState('');
-    const [pendingUsers, setpendingUsers] = React.useState([]);
+    const [Materials, setMaterials] = React.useState([]);
     const tableCustomStyles = {
         headCells: {
           style: {
@@ -21,46 +21,67 @@ export default function ListeDesMateriels() {
             backgroundColor: '#97adc7'
           },
         },}
-     
 
-    const Data=[
-        {
-            Image:image1,
-            Sku:"12365489",
-            Titre:"Arduino",
-            Description:"arduino mrigl",
-            Departement:"informatique",
-            disponibilité:true,
-        },
+        useEffect(() => {
+            fetch('http://localhost:8080/api/v1/auth/GetMaterials', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    //message
+                    //setmessage(data.message)
+                    console.log('Success:', data);
+                    setMaterials(data);
+                }
+                )
+                .catch((error) => {
+                    console.error('Error:', error);
+                }
+                );
+          }, []);
         
-    ];
+
+    // const Data=[
+    //     {
+    //         Image:image1,
+    //         Sku:"12365489",
+    //         Titre:"Arduino",
+    //         Description:"arduino mrigl",
+    //         Departement:"informatique",
+    //         disponibilité:true,
+    //     },
+        
+    // ];
     const columns =[
         {
             name:"Photo",
             width:"250px",
-            selector:row=><Avatar src={row.Image}  style={{width:"150px",height:"150px",margin:1}} />,
+            selector:row=><Avatar src={row.images[0].image}  style={{width:"150px",height:"150px",margin:1}} />,
         },
         {
             name:"SKU",
-            selector:row=>row.Sku,
+            selector:row=>row.sku,
         },
         {
             name:"Titre",
-            selector:row=>row.Titre,
+            selector:row=>row.titre,
         },
         {
             name:"Description",
-            selector:row=>row.Description,
+            selector:row=>row.description,
             
         },
         {
             name:"Departement",
-            selector:row=>row.Departement,
+            selector:row=>row.departement,
             
         },
         {
             name:"Disponibilité",
-            selector:row=>{return row.disponibilité ? "disponible":"indisponible"; },
+            selector:row=>{return row.disponible ? "disponible":"indisponible"; },
             
         },
         {
@@ -93,7 +114,7 @@ export default function ListeDesMateriels() {
             </>)
             }
     
-        <DataTable columns={columns} data={Data} pagination fixedHeader responsive striped customStyles={tableCustomStyles} />
+        <DataTable columns={columns} data={Materials} pagination fixedHeader responsive striped customStyles={tableCustomStyles} />
     </Paper>
        
     </Grid>

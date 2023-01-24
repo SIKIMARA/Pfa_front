@@ -1,20 +1,40 @@
 import { Autocomplete, Avatar, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchBar from './SearchBar';
 import SearchIcon from '@mui/icons-material/Search';
+import ListMaterials from './ListMaterials';
 
 export default function Filter() {
+    const [search,setSearch]=useState('');
     const [departement,setDepartement]=useState("informatique")
     const [disponibilité,setDisponibilité]=useState(true)
-    const top100Films = [
-        { title: 'The Shawshank Redemption' },
-        { title: 'The Godfather' },
-        { title: 'The Godfather: Part II'},
-        { title: 'The Dark Knight'},
-        { title: '12 Angry Men'},
-      ];
+
+    const [Materials,setMaterials]=useState([]);
+      useEffect(() => {
+        fetch('http://localhost:8080/api/v1/auth/GetMaterials', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                //message
+                //setmessage(data.message)
+                console.log('Success:', data);
+                setMaterials(data.map((e)=>{return {title:e.titre}}));
+            }
+            )
+            .catch((error) => {
+                console.error('Error:', error);
+            }
+            );
+      }, []);
+      const submitHandler=()=>{
+
+      }
   return (
     <Box>
         <Paper elevation={6} sx={{m:4,background:"#e8f2fa",padding:3}}>
@@ -23,10 +43,27 @@ export default function Filter() {
                 <Typography  sx={{fontWeight:"bold",fontSize:"20px",display:"flex",alignItems:"center",justifyContent:"center"}}><FilterAltIcon /> Filter</Typography>
             </Grid>
             <Grid item xs={10}>
-                <SearchBar/>
+                <Autocomplete
+                freeSolo
+                id="free-solo-2-demo"
+                disableClearable
+                options={Materials.map((option) => option.title)}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Search input"
+                        InputProps={{
+                        ...params.InputProps,
+                        type: 'search',
+                        }}
+                        onChange={(e)=>setSearch(e.target.value)}
+                        value={search}
+                    />
+                    )}
+                />
             </Grid>
             <Grid item xs={2} sx={{display:"flex",alignItems:"center"}}>
-                <Button variant="contained" size='large' endIcon={<SearchIcon/>}>Search</Button>
+                <Button variant="contained" size='large' onClick={submitHandler}   endIcon={<SearchIcon/>}>Search</Button>
             </Grid>
             <Grid item xs={6}>
              <FormControl fullWidth>
@@ -65,6 +102,7 @@ export default function Filter() {
             
             </Grid>
         </Paper>
+        <ListMaterials disponibilité={disponibilité} Search={search} departement={departement} />
     </Box>
   )
 }

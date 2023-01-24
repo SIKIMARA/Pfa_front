@@ -67,17 +67,22 @@ const pages = ['Se connecter', "S'identifier"];
       <AppBar position="static">
         <Toolbar sx={{backgroundColor:"white"}}>
           
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1,color:"blue",fontWeight:"bold" }}>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1,color:"blue",fontWeight:"bold",cursor:'pointer' }} onClick={(e)=>{navigate('/')}}>
           
             <Inventory2Icon sx={{paddingTop:"4px"}}/> GESTION D'INVENTAIRE
           </Typography>
           {auth ? (
             <div style={{display:"flex",alignItems:"center"}}>
-              <IconButton href='/panier'>
-              <Badge badgeContent={1} color="primary">
-                 <LocalGroceryStoreIcon color="action" />
-              </Badge>
-              </IconButton>
+              { localStorage.getItem("role")=="ENSEIGNANT"?
+                <IconButton href='/panier'>
+                <Badge badgeContent={3} color="primary">
+                   <LocalGroceryStoreIcon color="action" />
+                </Badge>
+                </IconButton> 
+                :
+                null
+              }
+              
               <IconButton
               
                 size="large"

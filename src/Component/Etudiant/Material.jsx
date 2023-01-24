@@ -17,7 +17,7 @@ export default function Material(props) {
         
         
       >
-        <img src={props.infos.image} style={{width:"100%",height:"100%"}} alt="" />
+        <img src={props.infos.images[0].image} style={{width:"100%",height:"100%"}} alt="" />
       </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" sx={{fontWeight:"bold"}} component="div">

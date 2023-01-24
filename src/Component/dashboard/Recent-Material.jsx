@@ -1,11 +1,31 @@
 import { Alert, Avatar, Box, Button, Grid, IconButton, Paper, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import StringAvatar from '../StringAvatar';
 
 
 export default function RecentMateriel() {
- 
+    const [Materials, setMaterials] = React.useState([]);
+    useEffect(() => {
+        fetch('http://localhost:8080/api/v1/auth/GetMaterials', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                //message
+                //setmessage(data.message)
+                console.log('Success:', data);
+                setMaterials(data);
+            }
+            )
+            .catch((error) => {
+                console.error('Error:', error);
+            }
+            );
+      }, []);
     const tableCustomStyles = {
         headCells: {
           style: {
@@ -16,34 +36,20 @@ export default function RecentMateriel() {
         },}
     
 
-    const Data=[
-        {
-            Image:"arduino",
-            SKU:"1",
-            Titre:"Arduino 300 ",
-            
-        },
-        {
-            Image:"Resistance",
-            SKU:"2",
-            Titre:"Resistance 220 ohm",
-        },
-        
-    
-    ];
+   
     const columns =[
         {
             name:"image",
-            selector:row=><StringAvatar string={`${row.Titre}`} />
+            selector:row=><Avatar src={row.images[0].image} />
         }
         ,
         {
             name:"SKU",
-            selector:row=>row.SKU,
+            selector:row=>row.sku,
         },
         {
             name:"Titre",
-            selector:row=>row.Titre,
+            selector:row=>row.titre,
         },
         
         
@@ -57,7 +63,7 @@ export default function RecentMateriel() {
     
    
     
-        <DataTable columns={columns} data={Data}  fixedHeader responsive striped customStyles={tableCustomStyles} style={{color:'black'}} />
+        <DataTable columns={columns} data={Materials}  fixedHeader responsive striped customStyles={tableCustomStyles} style={{color:'black'}} />
     
   )
 }
