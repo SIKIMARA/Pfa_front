@@ -15,62 +15,27 @@ import ListeDesMateriels from './ListeDesMateriels';
 
 export default function G_Materials() {
     const [message, setmessage] = React.useState('');
-    const [pendingUsers, setpendingUsers] = React.useState([]);
-    const tableCustomStyles = {
-        headCells: {
-          style: {
-            
-            fontWeight: 'bold',
-            backgroundColor: '#97adc7'
-          },
-        },}
-   
-
-    const Data=[
-        {
-            Nom:"Bougarrani",
-            Prenom:"Idriss",
-            Email:"bougarrani.idriss@usmba.ac.ma",
-            Role:"Professeur"
-        },
-        {
-            Nom:"Bougarrani",
-            Prenom:"Idriss",
-            Email:"bougarrani.idriss@usmba.ac.ma",
-            Role:"Etudiant"
-        }
-    ];
-    const columns =[
-        {
-            name:"Nom",
-            selector:row=>row.firstname,
-        },
-        {
-            name:"Prenom",
-            selector:row=>row.lastname,
-        },
-        {
-            name:"Email",
-            selector:row=>row.email,
-            
-        },
-        {
-            name:"Role",
-            selector:row=>row.role,
-        },
-        {
-            name:"Action",
-            selector:row=>
-            (<Box >
-            <IconButton color='success' onClick={(e)=>{}}><CheckCircleIcon/></IconButton>
-            <IconButton color='error' onClick={(e)=>{}}><RemoveCircleIcon/></IconButton>
-            </Box>
-            )
-        },
-        
-        
-    ]
     
+   const submitHandler=()=>{
+    console.log(JSON.stringify([store.getState().Material]))
+    fetch('http://localhost:8080/api/v1/auth/AddMaterials', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([store.getState().Material]),
+    })
+      .then((data) => {
+        //message
+        setmessage("success")
+        console.log('Success:', data);
+      }
+      )
+      .catch((error) => {
+        console.error('Error:', error);
+      }
+      );
+   }
     
   return (
     
@@ -92,7 +57,7 @@ export default function G_Materials() {
             <Divider/>
             <Grid item xs={7}><AddMaterial /></Grid>
             <Grid item xs={12} style={{display:"flex",justifyContent:"center"}}>
-                <Button sx={{margin:5}} variant="contained" size='large' endIcon={<PrecisionManufacturingIcon />} onClick={(e)=>{console.log(store.getState().Material)}}> Ajouter Materiel</Button>
+                <Button sx={{margin:5}} variant="contained" size='large' endIcon={<PrecisionManufacturingIcon />} onClick={submitHandler}> Ajouter Materiel</Button>
             </Grid>
         </Grid>
        

@@ -83,7 +83,7 @@ export default function ListeDesMateriels() {
     
     <Grid xs={12}>
     <Paper style={{padding:"20px",borderRadius:"20px"}}>
-        <Typography  variant='h5' m={3} style={{textAlign:"center"}}> <ManageAccountsIcon sx={{scale:1.2}}/> LES DEMANDES D'INSCRIPTIONS</Typography>
+        <Typography  variant='h5' m={3} style={{textAlign:"center"}}> <ManageAccountsIcon sx={{scale:1.2}}/> Les Materiels</Typography>
         
         {message && 
             (<>

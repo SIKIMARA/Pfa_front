@@ -1,5 +1,5 @@
 import { Button, IconButton } from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
@@ -39,22 +39,30 @@ const img = {
 export default function ImageUploader(Addfiles) {
   const dispatch=useDispatch();
   const [files, setFiles] = useState([]);
+  
   dispatch(updateImages(files))
   const {getRootProps, getInputProps} = useDropzone({
     accept: {
       'image/*': []
     },
-    onDrop: acceptedFiles => {
-      setFiles(acceptedFiles.map(file => Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      })));
-      
-    }
-  });
+    onDrop : useCallback((acceptedFiles) => {
+      acceptedFiles.map((file) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          setFiles((prevState) => [
+            ...prevState,
+              {image: e.target.result} ,
+          ]);
+        };
+        reader.readAsDataURL(file);
+        return file;
+      });
+  })
+});
   
   const thumbs = files.map(file => (
     <div style={{
-    background:`url(${file.preview})`,
+    background:`url(${file.image})`,
     backgroundPosition:'center',
     backgroundSize:'cover',
     display: 'inline-flex',

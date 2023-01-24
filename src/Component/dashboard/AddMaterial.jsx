@@ -9,6 +9,7 @@ export default function (props) {
   const dispatch=useDispatch();
     
     const [tags,setTags]=useState([]);
+    dispatch(updateTags( tags.map((e)=>e.id).join(",")))
       const handleDelete = i => {
         setTags(tags.filter((tag, index) => index !== i));
         
@@ -62,7 +63,7 @@ export default function (props) {
         <Typography style={{fontWeight:"bold",marginTop:3}}>Keywords : </Typography>
         <ReactTags
           tags={tags}
-          handleInputChange={(e)=>{dispatch(updateTags((tags)))}}
+          //handleInputChange={(e)=>{dispatch(updateTags(tags))}}
           handleDelete={handleDelete}
           handleAddition={handleAddition}
           handleDrag={handleDrag}

@@ -36,7 +36,7 @@ export default function Material(props) {
         </Box>
       </CardContent>
       <CardActions style={{display:"flex",justifyContent:"center"}}>
-        {(props.infos.disponible && localStorage.getItem('role')=="ETUDIANT")? <Button size="medium" variant='contained' href= {`/Material/${props.infos.id}`} style={{fontWeight:"bold",textAlign:"center"}} endIcon={<LocalGroceryStoreIcon/>}>Plus Details</Button> : null}
+        {(props.infos.disponible && localStorage.getItem('role')=="ENSEIGNANT")? <Button size="medium" variant='contained' href= {`/Material/${props.infos.id}`} style={{fontWeight:"bold",textAlign:"center"}} endIcon={<LocalGroceryStoreIcon/>}>Plus Details</Button> : null}
       </CardActions>
     </Card>
   );

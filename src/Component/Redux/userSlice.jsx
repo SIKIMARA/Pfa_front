@@ -9,6 +9,7 @@ const MaterialSlice = createSlice({
         tags:[],
         images:[],
         departement:'informatique',
+        disponible:true
     },
     reducers: {
         updateSku: (state, action) => {
