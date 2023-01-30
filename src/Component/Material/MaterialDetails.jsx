@@ -4,26 +4,27 @@ import Authenticated from '../Login/Authenticated'
 import ensaf from '../../Images/Arduino.jpg';
 import Carousel from 'react-elastic-carousel'
 import  { useRef } from "react";
-import { Button, ButtonGroup, Divider, Grid, TextField, Typography } from '@mui/material';
+import { Alert, Button, ButtonGroup, Divider, Grid, TextField, Typography } from '@mui/material';
 import ScienceIcon from '@mui/icons-material/Science';
 import { useState } from 'react';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import { Box } from '@mui/system';
 
-const Data=[
-  {
-      id:1,
-      image:'../../Images/Arduino.jpg',
-      images:'',
-      sku:'1223542366',
-      titre:'Arduino Uno R3',
-      description:"This version is optimized in the original version to ensure consistent and compatible with the original, but also easy to use Increase the pin socket, to facilitate the use of DuPont line",
-      departement:"informatique",
-      disponible :true,
-      motClés:["informatique","arduino","hardware","embarqué"]
-  },]
+// const Data=[
+//   {
+//       id:1,
+//       image:'../../Images/Arduino.jpg',
+//       images:'',
+//       sku:'1223542366',
+//       titre:'Arduino Uno R3',
+//       description:"This version is optimized in the original version to ensure consistent and compatible with the original, but also easy to use Increase the pin socket, to facilitate the use of DuPont line",
+//       departement:"informatique",
+//       disponible :true,
+//       motClés:["informatique","arduino","hardware","embarqué"]
+//   },]
 export default function MaterialDetails() {
-  const [count,setCount]=useState(0);
+
+  const [message,setmessage]=useState({type:'',message:''});
   const carouselRef = useRef(null);
   const [material,setMaterial]=useState([]);
   const {id}=useParams();
@@ -47,6 +48,36 @@ export default function MaterialDetails() {
         }
         );
   }, []);
+  const handleSubmit=()=>{
+    fetch('http://localhost:8080/api/v1/auth/panniers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        {
+          userId:localStorage.getItem("id"),
+          materialId:material.id,
+        }
+      ),
+    })
+      .then((data) => {
+        //message
+        if(data.status==409){
+          setmessage({type:'warning',message:'ce materiel est deja ajouté au panier'})
+        }
+        if(data.status==200){
+          setmessage({type:'success',message:'materiel est ajouté au panier'})
+        }
+        
+        console.log('Success:', data);
+      }
+      )
+      .catch((error) => {
+        console.error('Error:', error);
+      }
+      );
+  }
   return (
     
     <Grid container xs={12} sx={{height:"100vh",alignItems:"center"}}>
@@ -71,7 +102,7 @@ export default function MaterialDetails() {
       }
     }}
        >
-        {console.log(material)}
+        
         {
         
         material.images?.map((e)=>{
@@ -83,35 +114,16 @@ export default function MaterialDetails() {
 </Grid>
 <Divider/>
 <Grid item xs={5} padding={5} sx={{borderLeft:"1px solid #878787",fontFamily:"poppins"}}>
+  {message && <Alert severity={message.type}>{message.message}</Alert>}
   <Typography><span style={{fontWeight:"bold"}}>SKU</span> : {material.sku}</Typography>
   <Typography variant='h3' style={{textAlign:"center" ,fontWeight:"bold",fontFamily:"poppins"}}> {material.titre}</Typography>
   <Typography variant='h7' 
   style={{textAlign:"center" ,fontFamily:"poppins",display:"flex",alignItems:"center",marginTop:20,color:"#028ec9"}}
   ><ScienceIcon/> <span style={{fontWeight:"bold"}}>Departement</span> :  {material.departement}</Typography>
   <Grid style={{display:"flex",margin:20}} >
-  <ButtonGroup style={{marginRight:"20px"}}>
-          <Button
-            aria-label="reduce"
-            variant='contained'
-            onClick={() => {
-              setCount(Math.max(count - 1, 0));
-            }}
-          >
-            -
-          </Button>
-          <TextField id="outlined-basic"   value={count} style={{width:"50px"}} />
-          <Button
-            aria-label="increase"
-            variant='contained'
-            onClick={() => {
-              setCount(count + 1);
-            }}
-          >
-            +
-          </Button>
-  </ButtonGroup>
+  
 
-      <Button variant="contained" size='large' endIcon={<LocalGroceryStoreIcon/>} style={{fontWeight:"bold"}}>Add To Basket</Button>
+      <Button variant="contained" size='large' endIcon={<LocalGroceryStoreIcon/>} style={{fontWeight:"bold"}} onClick={handleSubmit}>Add To Basket</Button>
       </Grid>
       <Typography variant='h7' 
       style={{textAlign:"center" ,fontFamily:"poppins",display:"flex",alignItems:"center",marginTop:20}}

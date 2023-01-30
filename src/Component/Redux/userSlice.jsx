@@ -9,6 +9,7 @@ const MaterialSlice = createSlice({
         tags:[],
         images:[],
         departement:'informatique',
+        quantite:0,
         disponible:true
     },
     reducers: {
@@ -28,6 +29,10 @@ const MaterialSlice = createSlice({
             
             state.description = action.payload;           
         },
+        updateCount: (state, action) => {
+            
+            state.quantite = action.payload;           
+        },
         updateDepartement: (state, action) => {
             
             state.departement = action.payload;           
@@ -39,6 +44,6 @@ const MaterialSlice = createSlice({
     }
 });
 
-export const { updateTitre,updateSku,updateImages,updateDepartement,updateDescription,updateTags } = MaterialSlice.actions;
+export const { updateTitre,updateSku,updateImages,updateDepartement,updateDescription,updateTags,updateCount } = MaterialSlice.actions;
 
 export default MaterialSlice.reducer;

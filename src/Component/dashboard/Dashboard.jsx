@@ -9,6 +9,7 @@ import Historique from './Historique'
 import Authenticated from '../Login/Authenticated'
 import G_Materials from './G_Materials'
 import Utilisateurs_PE from './Utilisateurs_PE'
+import Material_disp from './Material_disp'
 export default function Dashboard() {
   return (
     <Authenticated>
@@ -22,6 +23,8 @@ export default function Dashboard() {
       <Route path='/Historique' exact element={<Historique/>}/>
       <Route path='/Materiels' exact element={<G_Materials/>}/>
       <Route path='/Utilisateurs' element={<Utilisateurs_PE/>}></Route>
+      <Route path='/Indisponible' element={<Material_disp/>}></Route>
+      
       </Routes>
     </Box>
     </Box>

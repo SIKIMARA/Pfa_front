@@ -1,13 +1,14 @@
 import { Autocomplete, Avatar, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SearchBar from './SearchBar';
 import SearchIcon from '@mui/icons-material/Search';
 import ListMaterials from './ListMaterials';
 
 export default function Filter() {
     const [search,setSearch]=useState('');
+    const inputElement = useRef();
     const [departement,setDepartement]=useState("informatique")
     const [disponibilité,setDisponibilité]=useState(true)
 
@@ -33,7 +34,7 @@ export default function Filter() {
             );
       }, []);
       const submitHandler=()=>{
-
+            setSearch(inputElement.current.value)
       }
   return (
     <Box>
@@ -46,7 +47,8 @@ export default function Filter() {
                 <Autocomplete
                 freeSolo
                 id="free-solo-2-demo"
-                disableClearable
+                disableClearable 
+                
                 options={Materials.map((option) => option.title)}
                 renderInput={(params) => (
                     <TextField
@@ -56,11 +58,13 @@ export default function Filter() {
                         ...params.InputProps,
                         type: 'search',
                         }}
-                        onChange={(e)=>setSearch(e.target.value)}
-                        value={search}
+                        inputRef={inputElement}
+                        
                     />
                     )}
+                    
                 />
+                
             </Grid>
             <Grid item xs={2} sx={{display:"flex",alignItems:"center"}}>
                 <Button variant="contained" size='large' onClick={submitHandler}   endIcon={<SearchIcon/>}>Search</Button>

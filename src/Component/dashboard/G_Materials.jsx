@@ -14,10 +14,17 @@ import store from '../Redux/store';
 import ListeDesMateriels from './ListeDesMateriels';
 
 export default function G_Materials() {
-    const [message, setmessage] = React.useState('');
+    const [message, setmessage] = React.useState({type:'',message:''});
     
    const submitHandler=()=>{
-    console.log(JSON.stringify([store.getState().Material]))
+    const b=Object.values(store.getState().Material).every(value => {
+      if (value==="") {
+        setmessage({type:'warning',message:'field is empty'})
+       return false;
+      }
+      return true;
+      });
+    if(b){
     fetch('http://localhost:8080/api/v1/auth/AddMaterials', {
       method: 'POST',
       headers: {
@@ -27,7 +34,7 @@ export default function G_Materials() {
     })
       .then((data) => {
         //message
-        setmessage("success")
+        setmessage({type:'success',message:'materiel est ajouté'})
         console.log('Success:', data);
       }
       )
@@ -35,7 +42,7 @@ export default function G_Materials() {
         console.error('Error:', error);
       }
       );
-   }
+   }}
     
   return (
     
@@ -48,7 +55,7 @@ export default function G_Materials() {
         {message && 
             (<>
             
-            <Alert sx={{m:2}} variant="outlined" severity="success"> {message}</Alert>
+            <Alert sx={{m:2}} variant="outlined" severity={message.type}> {message.message}</Alert>
            
             </>)
             } 
@@ -63,9 +70,9 @@ export default function G_Materials() {
        
     </Paper>   
 
-    <Paper elevation={6} style={{padding:"20px",margin:20}}>
+    
         <ListeDesMateriels/>
-    </Paper>
+    
     
     
     

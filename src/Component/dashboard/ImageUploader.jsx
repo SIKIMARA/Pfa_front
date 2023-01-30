@@ -1,9 +1,9 @@
-import { Button, IconButton } from '@mui/material';
+import {  IconButton } from '@mui/material';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
-import { textAlign } from '@mui/system';
+
 import { useDispatch } from 'react-redux';
 import { updateImages } from '../Redux/userSlice';
 
@@ -36,9 +36,15 @@ const img = {
 };
 
 
-export default function ImageUploader(Addfiles) {
+export default function ImageUploader(props) {
   const dispatch=useDispatch();
   const [files, setFiles] = useState([]);
+  useEffect(()=>{
+    if(props.images!=null){
+      console.log(props.images.map((e)=>{return {image:e.image}}))
+      setFiles(props.images.map((e)=>{return {image:e.image}}))
+    }
+  },[])
   
   dispatch(updateImages(files))
   const {getRootProps, getInputProps} = useDropzone({

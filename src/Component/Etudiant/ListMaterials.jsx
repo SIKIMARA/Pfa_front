@@ -25,12 +25,22 @@ export default function ListMaterials(props) {
             }
             );
       }, []);
+
+    const filter=(e)=>{
+        
+        if(e.titre===props.Search || props.Search==="" || props.Search?.split(' ').some(r=> e.tags?.split(',').includes(r))){
+            return true
+        }
+        else{
+            return false
+        }
+    }
   return (
     <div style={{padding:10,display:"flex",flexWrap:"wrap",justifyContent:"center"}}>
         {
             Materials.map((e)=>{
-                
-               if(props.disponibilité == e.disponible && props.departement == e.departement ) {
+                const b=filter(e);
+               if(props.disponibilité == e.disponible && props.departement == e.departement && b ) {
                  return <Material key={e.id} infos={e} />
                } 
 })

@@ -17,6 +17,8 @@ import MaterialDetails from './Component/Material/MaterialDetails';
 import G_Materials from './Component/dashboard/G_Materials';
 import Panier from './Component/Enseignant/Panier';
 import Utilisateurs_PE from './Component/dashboard/Utilisateurs_PE';
+import Material_disp from './Component/dashboard/Material_disp';
+import Reservation from './Component/Enseignant/Reservation';
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
             <Route path='Invitations' element={<Utilisateurs/>}></Route>
             <Route path='Materiels' element={<G_Materials/>}></Route>
             <Route path='Utilisateurs' element={<Utilisateurs_PE/>}></Route>
+            <Route path='Indisponible' element={<Material_disp/>}></Route>
           </Route>
           <Route path='/' element={<Acceuil/>}>
           <Route path='' exact element={<HomeInterface/>}/>
@@ -38,6 +41,7 @@ function App() {
           <Route path='Etudiant' element={<Etudiant/>}>
           </Route>
           <Route path='/Panier' element={<Panier/>}></Route>
+          <Route path='/Reservation' element={<Reservation/>}></Route>
           <Route path='Enseignant' element={<Enseignant/>}>
             
           </Route>

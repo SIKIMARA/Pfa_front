@@ -3,6 +3,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Enseignant from '../Enseignant/Enseignant'
 import Panier from '../Enseignant/Panier'
+import Reservation from '../Enseignant/Reservation'
 import Etudiant from '../Etudiant/Etudiant'
 import Header from '../Header/Header'
 import Login from '../Login/Login'
@@ -21,6 +22,7 @@ export default function Acceuil() {
       <Route path='/Etudiant' element={<Etudiant/>}></Route>
       <Route path='/Enseignant' element={<Enseignant/>}></Route>
       <Route path='/Panier' element={<Panier/>}></Route>
+      <Route path='/Reservation' element={<Reservation/>}></Route>
       <Route path='/Material/:id' element={<MaterialDetails/>}></Route>
       
       </Routes>

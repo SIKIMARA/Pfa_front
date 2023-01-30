@@ -1,4 +1,4 @@
-import { Alert, Avatar, Box, Button, Grid, IconButton, Paper, Typography } from '@mui/material'
+import { Alert, AppBar, Avatar, Box, Button, Dialog, DialogContent, DialogTitle, Grid, IconButton, Paper, Slide, Toolbar, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -9,10 +9,24 @@ import { width } from '@mui/system';
 import emailjs from '@emailjs/browser';
 import { RawOff } from '@mui/icons-material';
 import StringAvatar from '../StringAvatar';
+import ImageUploader from './ImageUploader';
+import AddMaterial from './AddMaterial';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function ListeDesMateriels() {
     const [message, setmessage] = React.useState('');
     const [Materials, setMaterials] = React.useState([]);
+    const [modif,setModif]=useState([]);
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = (e) => {
+        setOpen(true);
+        setModif(e);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
     const tableCustomStyles = {
         headCells: {
           style: {
@@ -80,6 +94,11 @@ export default function ListeDesMateriels() {
             
         },
         {
+            name:"Quantité",
+            selector:row=>row.quantite,
+            
+        },
+        {
             name:"Disponibilité",
             selector:row=>{return row.disponible ? "disponible":"indisponible"; },
             
@@ -89,7 +108,7 @@ export default function ListeDesMateriels() {
             width:"300px",
             selector:row=>
             (<Box sx={{display:"flex"}}>
-            <Button color='success' variant='contained' sx={{marginX:"20px"}}>Modifier</Button>
+            <Button color='success' variant='contained' sx={{marginX:"20px"}} onClick={(e)=>{handleClickOpen(row)}}>Modifier</Button>
             <Button color='error' variant='contained'>Supprimer</Button>
             </Box>
             )
@@ -97,13 +116,16 @@ export default function ListeDesMateriels() {
         
         
     ]
+    const Transition = React.forwardRef(function Transition(props, ref) {
+        return <Slide direction="up" ref={ref} {...props} />;
+      });
    
   return (
     
     <Grid container spacing={1} style={{width:"100vw",height:"100vh"}} >
     
     <Grid xs={12}>
-    <Paper style={{padding:"20px",borderRadius:"20px"}}>
+    
         <Typography  variant='h5' m={3} style={{textAlign:"center"}}> <ManageAccountsIcon sx={{scale:1.2}}/> Les Materiels</Typography>
         
         {message && 
@@ -115,7 +137,42 @@ export default function ListeDesMateriels() {
             }
     
         <DataTable columns={columns} data={Materials} pagination fixedHeader responsive striped customStyles={tableCustomStyles} />
-    </Paper>
+        <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        fullScreen
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Modifier Materiel
+            </Typography>
+            <Button autoFocus variant='contained' style={{background:'green'}} onClick={handleClose}>
+              Modifier
+            </Button>
+          </Toolbar>
+        </AppBar>
+        
+        <DialogContent>
+        <Grid container xs={12}>
+            <Grid item xs={5}><ImageUploader images={modif.images} /></Grid>
+            
+            <Grid item xs={7}><AddMaterial Materiels={modif} /></Grid>
+            
+        </Grid>
+        </DialogContent>
+        
+      </Dialog>
        
     </Grid>
     

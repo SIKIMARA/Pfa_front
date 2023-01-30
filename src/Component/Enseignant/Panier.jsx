@@ -8,7 +8,7 @@ export default function Panier() {
     const [count,setCount]=useState(0);
     const [Materials, setMaterials] = React.useState([]);
     useEffect(() => {
-        fetch('http://localhost:8080/api/v1/auth/GetMaterials', {
+        fetch(`http://localhost:8080/api/v1/auth/panniers/${localStorage.getItem("id")}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export default function Panier() {
     //     }
     // ]
   return (
-    <Paper sx={{width:"100vw",height:"100vh",background:"#ebf3ff"}}>
+    <Paper sx={{width:"100vw",height:"100vh",background:" rgb(0,0,255,0.1)"}}>
         <Typography variant='h4' style={{padding:30,fontWeight:"bold",display:'flex',alignItems:"center",justifyContent:"center"}}><LocalGroceryStoreIcon fontSize='large'/> Panier</Typography>
         {Materials.map((e)=>{
             return(
@@ -58,28 +58,8 @@ export default function Panier() {
                     </Grid>
                     <Grid item xs={7}>
                         <div style={{display:'flex',justifyContent:'end'}}>
-                            <ButtonGroup style={{marginRight:"20px"}}>
-                                    <Button
-                                        aria-label="reduce"
-                                        variant='contained'
-                                        onClick={() => {
-                                        setCount(Math.max(count - 1, 0));
-                                        }}
-                                    >
-                                        -
-                                    </Button>
-                                    <TextField id="outlined-basic"   value={count} style={{width:"50px"}} />
-                                    <Button
-                                        aria-label="increase"
-                                        variant='contained'
-                                        onClick={() => {
-                                        setCount(count + 1);
-                                        }}
-                                    >
-                                        +
-                                    </Button>
-                            </ButtonGroup>
-                            <Button variant='contained' style={{marginRight:"20px"}} endIcon={<LocalGroceryStoreIcon/>}>Reserver</Button>
+                            
+                            
                             <Button variant='contained' color="error" style={{marginRight:"20px"}} endIcon={<DeleteIcon/>}>Supprimer </Button>
                         </div>
                     </Grid>
@@ -89,8 +69,8 @@ export default function Panier() {
 
         })}
     <div  >
-    <Button variant='contained' size='large'  style={{margin:"30px",background:"#81fa6e"}}> {"<<"} Retour </Button>
-    <Button variant='contained' size='large'  style={{margin:"30px",background:"black"}}>Reserver Tout</Button>
+    <Button variant='contained' size='large'  style={{margin:"30px",background:"#81fa6e"}} href='/'> {"<<"} Retour </Button>
+    <Button variant='contained' size='large'  style={{margin:"30px",background:"black"}} href='/reservation'>Reserver Tout</Button>
     </div>
     </Paper>
   )

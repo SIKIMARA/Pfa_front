@@ -28,6 +28,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
 const drawerWidth = 240;
 const NavData=[
   {
@@ -60,6 +61,11 @@ const NavData=[
     text:"Utilisateurs",
     Icon:<PersonIcon />,
     link:"/dashboard/Utilisateurs",
+  },{
+    id:6,
+    text:"Materiels Indisponible",
+    Icon:<DomainVerificationIcon />,
+    link:"/dashboard/Indisponible",
   }
 ]
 const openedMixin = (theme) => ({
