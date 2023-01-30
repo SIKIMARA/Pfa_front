@@ -12,6 +12,7 @@ import StringAvatar from '../StringAvatar';
 import ImageUploader from './ImageUploader';
 import AddMaterial from './AddMaterial';
 import CloseIcon from '@mui/icons-material/Close';
+import store from '../Redux/store';
 
 export default function ListeDesMateriels() {
     const [message, setmessage] = React.useState('');
@@ -119,6 +120,9 @@ export default function ListeDesMateriels() {
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
       });
+      const handleSubmit=()=>{
+        console.log(store.getState().Material)
+      }
    
   return (
     
@@ -157,7 +161,7 @@ export default function ListeDesMateriels() {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Modifier Materiel
             </Typography>
-            <Button autoFocus variant='contained' style={{background:'green'}} onClick={handleClose}>
+            <Button autoFocus variant='contained' style={{background:'green'}} onClick={handleSubmit}>
               Modifier
             </Button>
           </Toolbar>

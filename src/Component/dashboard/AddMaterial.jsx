@@ -19,6 +19,10 @@ export default function AddMaterial (props) {
         setTags(props.Materiels.tags.split(',').map((e)=>{return{id:e,text:e}}))
         console.log(props.Materiels.tags.split(',').map((e)=>{return{id:e,text:e}}))
         setCount(props.Materiels.quantite)
+        dispatch(updateDescription((props.Materiels.description)))
+        dispatch(updateTitre((props.Materiels.titre)))
+        dispatch(updateSku((props.Materiels.sku)))
+        
       }
     },[])
     useEffect(()=>{
